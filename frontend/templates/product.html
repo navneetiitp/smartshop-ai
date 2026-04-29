@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Product Detail – SmartShop AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">SmartShop<span class="logo-ai">AI</span></span>
+    </a>
+    <a href="/" class="back-btn">← Back to Search</a>
+  </div>
+</nav>
+
+<main class="detail-main" id="detailMain">
+  <div class="detail-loading">
+    <div class="spinner"></div><p>Loading product…</p>
+  </div>
+</main>
+
+<script>
+  const productId = parseInt("{{ product_id }}");
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="/static/js/product.js"></script>
+</body>
+</html>

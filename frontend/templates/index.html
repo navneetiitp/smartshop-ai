@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartShop AI – Laptop Price Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">SmartShop<span class="logo-ai">AI</span></span>
+    </a>
+    <div class="nav-search-wrap">
+      <div class="nav-search">
+        <input type="text" id="navSearchInput" placeholder="Search laptops… Dell, HP, Apple, Lenovo" autocomplete="off"/>
+        <button class="nav-search-btn" onclick="triggerSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="nav-tags">
+      <span class="tag" onclick="quickSearch('Dell')">Dell</span>
+      <span class="tag" onclick="quickSearch('HP')">HP</span>
+      <span class="tag" onclick="quickSearch('Apple')">Apple</span>
+      <span class="tag" onclick="quickSearch('Lenovo')">Lenovo</span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="heroSection">
+  <div class="hero-content">
+    <div class="hero-badge">🤖 AI-Powered Price Intelligence</div>
+    <h1 class="hero-title">Find the Best Laptop Deal<br><span class="hero-accent">Across Every Store</span></h1>
+    <p class="hero-sub">Compare prices across Amazon, Flipkart & BestBuy. AI-scored for the best value.</p>
+    <div class="hero-search">
+      <input type="text" id="heroSearchInput" placeholder="Try: Dell XPS, MacBook Pro, HP Pavilion…" autocomplete="off"/>
+      <button class="hero-search-btn" onclick="triggerSearch()">Search Now</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="totalCount">3,370</span><span class="stat-label">Laptops</span></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Stores</span></div>
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">AI Scored</span></div>
+    </div>
+  </div>
+  <div class="hero-art">
+    <div class="floating-card card1">
+      <div class="fc-label">Best Deal</div>
+      <div class="fc-price">₹62,746</div>
+      <div class="fc-site">Flipkart</div>
+    </div>
+    <div class="floating-card card2">
+      <div class="fc-label">AI Score</div>
+      <div class="fc-score">87.4</div>
+      <div class="fc-bar"><div class="fc-fill" style="width:87%"></div></div>
+    </div>
+    <div class="floating-card card3">
+      <div class="fc-label">Price Drop</div>
+      <div class="fc-drop">↓ 12%</div>
+      <div class="fc-small">in 3 months</div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS + RESULTS -->
+<main class="main-content" id="mainContent" style="display:none">
+  <div class="results-header">
+    <div class="results-meta">
+      <h2 id="resultsTitle">Search Results</h2>
+      <span id="resultsCount" class="results-count"></span>
+    </div>
+    <div class="filter-bar">
+      <select id="filterWebsite" onchange="applyFilters()">
+        <option value="all">All Stores</option>
+        <option value="amazon">Amazon</option>
+        <option value="flipkart">Flipkart</option>
+        <option value="bestbuy">BestBuy</option>
+      </select>
+      <select id="filterSort" onchange="applyFilters()">
+        <option value="ai_score">Best Match (AI)</option>
+        <option value="price_asc">Price: Low to High</option>
+        <option value="price_desc">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+      <div class="price-range-wrap">
+        <input type="number" id="minPrice" placeholder="Min ₹" onchange="applyFilters()"/>
+        <span>–</span>
+        <input type="number" id="maxPrice" placeholder="Max ₹" onchange="applyFilters()"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div id="productGrid" class="product-grid"></div>
+    <div id="loadingState" class="loading-state" style="display:none">
+      <div class="spinner"></div>
+      <p>AI is analyzing products…</p>
+    </div>
+    <div id="emptyState" class="empty-state" style="display:none">
+      <div class="empty-icon">🔍</div>
+      <h3>No products found</h3>
+      <p>Try a different search term</p>
+    </div>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<!-- COMPARE MODAL -->
+<div id="compareModal" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="closeModal('compareModal')"></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Price Comparison</h3>
+      <button class="modal-close" onclick="closeModal('compareModal')">✕</button>
+    </div>
+    <div id="compareContent"></div>
+  </div>
+</div>
+
+<!-- PREDICT MODAL -->
+<div id="predictModal" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="closeModal('predictModal')"></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Price Forecast</h3>
+      <button class="modal-close" onclick="closeModal('predictModal')">✕</button>
+    </div>
+    <div id="predictContent"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>SmartShop AI &copy; 2024 &nbsp;|&nbsp; Data: Amazon · Flipkart · BestBuy &nbsp;|&nbsp; Powered by Scikit-learn + Flask</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
