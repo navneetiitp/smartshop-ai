@@ -1,16 +1,16 @@
 from flask import Blueprint, request, jsonify
-from utils.data_loader import get_dataframe
-from ml.ai_score import calculate_ai_score
-from ml.summarizer import generate_summary
+from backend.utils.data_loader import get_dataframe
+from backend.ml.ai_score import calculate_ai_score
+from backend.ml.summarizer import generate_summary
 import pandas as pd
 
 summary_bp = Blueprint("summary", __name__)
-
 
 @summary_bp.route("/summary/<int:product_id>")
 def summary(product_id):
     df = get_dataframe()
     row = df[df["id"] == product_id]
+
     if row.empty:
         return jsonify({"error": "Product not found"}), 404
 
