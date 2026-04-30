@@ -33,10 +33,10 @@
 from flask import Flask, render_template
 from flask_cors import CORS
 
-from routes.search import search_bp
-from routes.compare import compare_bp
-from routes.predict import predict_bp
-from routes.summary import summary_bp
+from backend.routes.search import search_bp
+from backend.routes.compare import compare_bp
+from backend.routes.predict import predict_bp
+from backend.routes.summary import summary_bp
 
 app = Flask(
     __name__,
