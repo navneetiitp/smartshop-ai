@@ -1,13 +1,12 @@
 from flask import Blueprint, request, jsonify
-from utils.data_loader import get_dataframe
-from ml.ai_score import score_dataframe
+from backend.utils.data_loader import get_dataframe
+from backend.ml.ai_score import score_dataframe
 import pandas as pd
 
 compare_bp = Blueprint("compare", __name__)
 
 
 def _price_explanation(best_price_item: dict, best_value_item: dict, listings: list) -> str:
-    """Best Deal explanation: lowest price + savings."""
     if not listings:
         return "Lowest price among all stores."
 
@@ -24,10 +23,8 @@ def _price_explanation(best_price_item: dict, best_value_item: dict, listings: l
 
 
 def _value_explanation(best_value_item: dict, listings: list) -> str:
-    """Best Value explanation: price + rating + reviews."""
     score = best_value_item.get("ai_score", 0)
     rating = best_value_item.get("ratings_num")
-    price = best_value_item.get("price", 0)
 
     parts = []
     if rating and rating > 0:
@@ -78,7 +75,6 @@ def compare():
 
     results.sort(key=lambda x: x["price"])
 
-    # ── Best Deal: strictly lowest price ─────────────────────────────────────
     best_deal_item = None
     best_value_item = None
 
@@ -86,16 +82,13 @@ def compare():
         min_price = results[0]["price"]
         max_price = results[-1]["price"]
 
-        # Best Deal = lowest price (ties broken by highest ai_score)
         cheapest = [r for r in results if r["price"] == min_price]
         best_deal_item = max(cheapest, key=lambda x: x.get("ai_score", 0))
 
-        # Best Value = highest AI score (ties broken by lowest price)
         best_value_item = max(results, key=lambda x: (x.get("ai_score", 0), -x["price"]))
 
         same = best_deal_item["id"] == best_value_item["id"]
 
-        # Attach badge type and explanation to each listing
         for r in results:
             is_deal  = r["id"] == best_deal_item["id"]
             is_value = r["id"] == best_value_item["id"]
