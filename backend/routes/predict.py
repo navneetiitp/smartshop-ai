@@ -1,9 +1,8 @@
 from flask import Blueprint, request, jsonify
-from utils.data_loader import get_dataframe
-from ml.predictor import predict_future_price
+from backend.utils.data_loader import get_dataframe
+from backend.ml.predictor import predict_future_price
 
 predict_bp = Blueprint("predict", __name__)
-
 
 @predict_bp.route("/predict")
 def predict():
