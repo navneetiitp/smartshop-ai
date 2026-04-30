@@ -1,10 +1,9 @@
 from flask import Blueprint, request, jsonify
-from utils.data_loader import get_dataframe
-from ml.ai_score import score_dataframe
+from backend.utils.data_loader import get_dataframe
+from backend.ml.ai_score import score_dataframe
 import pandas as pd
 
 search_bp = Blueprint("search", __name__)
-
 
 @search_bp.route("/search")
 def search():
@@ -18,7 +17,6 @@ def search():
 
     df = get_dataframe()
 
-    # Filter by query
     if query:
         mask = (
             df["product_name"].str.lower().str.contains(query, na=False) |
@@ -26,20 +24,16 @@ def search():
         )
         df = df[mask]
 
-    # Filter by website
     if website and website != "all":
         df = df[df["website"].str.lower() == website.lower()]
 
-    # Filter by price
     df = df[(df["price"] >= min_price) & (df["price"] <= max_price)]
 
     if df.empty:
         return jsonify({"results": [], "total": 0, "page": page, "pages": 0})
 
-    # Calculate AI scores
     df = score_dataframe(df)
 
-    # Sort
     sort_map = {
         "ai_score": ("ai_score", False),
         "price_asc": ("price", True),
@@ -79,8 +73,10 @@ def get_product(product_id):
     df = get_dataframe()
     df = score_dataframe(df)
     row = df[df["id"] == product_id]
+
     if row.empty:
         return jsonify({"error": "Product not found"}), 404
+
     row = row.iloc[0]
     return jsonify({
         "id": int(row["id"]),
