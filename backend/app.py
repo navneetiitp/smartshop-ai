@@ -9,13 +9,13 @@ from dotenv import load_dotenv
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(PROJECT_ROOT / ".env")
 
-from live_provider import is_configured
-from routes.search import search_bp
-from routes.compare import compare_bp
-from routes.predict import predict_bp
-from routes.summary import summary_bp
-from utils.data_loader import get_dataframe
-from utils.live_history import stats as history_stats
+from .live_provider import is_configured
+from .routes.search import search_bp
+from .routes.compare import compare_bp
+from .routes.predict import predict_bp
+from .routes.summary import summary_bp
+from .utils.data_loader import get_dataframe
+from .utils.live_history import stats as history_stats
 
 app = Flask(
     __name__,

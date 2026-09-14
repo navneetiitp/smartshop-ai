@@ -9,7 +9,7 @@ from sklearn.metrics import mean_absolute_percentage_error
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import PolynomialFeatures
 
-from utils.live_history import history_for_product
+from ..utils.live_history import history_for_product
 
 
 def _empty(reason: str, current_price: float | int | None = None,

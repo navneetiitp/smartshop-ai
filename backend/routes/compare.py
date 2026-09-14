@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
-from ml.ai_score import score_dataframe
-from utils.data_loader import get_dataframe
-from live_provider import is_configured, search_live
-from utils.live_history import record_observations
+from ..ml.ai_score import score_dataframe
+from ..utils.data_loader import get_dataframe
+from ..live_provider import is_configured, search_live
+from ..utils.live_history import record_observations
 import pandas as pd
 import re
 

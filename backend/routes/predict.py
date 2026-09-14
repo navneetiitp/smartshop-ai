@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from utils.data_loader import get_dataframe
-from ml.predictor import predict_future_price
-from live_provider import is_configured, search_live
+from ..utils.data_loader import get_dataframe
+from ..ml.predictor import predict_future_price
+from ..live_provider import is_configured, search_live
 
 predict_bp = Blueprint("predict", __name__)
 

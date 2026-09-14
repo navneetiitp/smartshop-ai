@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from utils.data_loader import get_dataframe
-from ml.ai_score import calculate_ai_score
-from ml.summarizer import generate_summary
+from ..utils.data_loader import get_dataframe
+from ..ml.ai_score import calculate_ai_score
+from ..ml.summarizer import generate_summary
 import pandas as pd
 
 summary_bp = Blueprint("summary", __name__)
